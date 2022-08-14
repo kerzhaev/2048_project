@@ -2,6 +2,21 @@
 from logics import *
 import pygame
 import sys
+from database import get_best, cur
+
+GAMERS_DB = get_best()
+
+def draw_top_gamers():
+    font_top = pygame.font.SysFont('simsun', 20)
+    font_gamer = pygame.font.SysFont('simsun', 18)
+    text_head = font_top.render('Best tries: ', True, COLOR_TEXT)
+    screen.blit(text_head, (250, 5)) # отрисовываем лучшие попытки игры
+    for index, gamer in enumerate(GAMERS_DB):
+        name, score = gamer
+        s = f'{index+1}. {name} - {score}'
+        text_gamer = font_gamer.render(s, True, COLOR_TEXT)
+        screen.blit(text_gamer, (230, 28 + 28 * index))  # отрисовываем лучшие попытки игры
+
 
 def draw_interface(score, delta=0):
     pygame.draw.rect(screen, WHITE, TITLE_REC)  # рисуем окно
@@ -16,7 +31,8 @@ def draw_interface(score, delta=0):
         text_delta = font_delta.render(f"+{delta}", True, COLOR_TEXT)
         screen.blit(text_delta, (160, 80))  # прикрепили переменную к экрану
     pretty_print(mas)
-    # отрисовка
+    draw_top_gamers()
+    # отрисовка квадратиков
     for row in range(BLOCKS):
         for column in range(BLOCKS):
             # находим левые верхние края блоков
@@ -70,6 +86,9 @@ mas[3][0]=4
 
 print(get_empty_list(mas))
 pretty_print(mas)
+
+# for gamer in get_best():
+#     print(gamer)
 
 pygame.init()
 screen = pygame.display.set_mode((WIDTH,HEIGTH))
